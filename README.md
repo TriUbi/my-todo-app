@@ -2,6 +2,9 @@
 
 A modern and interactive To-Do List built with **React**, **TypeScript**, and **Styled Components**. This app includes light/dark themes, task management features, and a clean, minimal design.
 
+## 🚀 Live Demo  
+Check out the live version here: [My To-Do List App](https://triubi.github.io/my-todo-app/)
+
 ---
 
 ## 🛠️ Technologies & Tools  

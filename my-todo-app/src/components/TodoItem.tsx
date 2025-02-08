@@ -1,3 +1,4 @@
+import { ListItem, Button } from "../styles/TodoItem.styles";
 import { Todo } from "../types/types";
 
 interface Props {
@@ -8,11 +9,13 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({ todo, toggleTodo, deleteTodo }) => {
   return (
-    <li style={{ textDecoration: todo.completed ? "line-through" : "none" }}>
-      {todo.text}
-      <button onClick={() => toggleTodo(todo.id)}>✔</button>
-      <button onClick={() => deleteTodo(todo.id)}>❌</button>
-    </li>
+    <ListItem completed={todo.completed}>
+      <span>{todo.text}</span>
+      <div>
+        <Button onClick={() => toggleTodo(todo.id)}>✔</Button>
+        <Button onClick={() => deleteTodo(todo.id)}>❌</Button>
+      </div>
+    </ListItem>
   );
 };
 

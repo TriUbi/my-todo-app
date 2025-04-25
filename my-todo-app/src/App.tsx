@@ -9,10 +9,10 @@ import { Todo } from "./types/types";
 import { Button } from "antd";
 import styled from "styled-components";
 
-const ThemeButton = styled(Button)<{ themeMode: string }>`
-  background-color: ${({ themeMode }) =>
-    themeMode === "light" ? "#f5f5f5" : "#444"};
-  color: ${({ themeMode }) => (themeMode === "light" ? "#333" : "#fff")};
+const ThemeButton = styled(Button)<{ $themeMode: string }>`
+  background-color: ${({ $themeMode }) =>
+    $themeMode === "light" ? "#f5f5f5" : "#444"};
+  color: ${({ $themeMode }) => ($themeMode === "light" ? "#333" : "#fff")};
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -20,42 +20,56 @@ const ThemeButton = styled(Button)<{ themeMode: string }>`
   transition: background-color 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: ${({ themeMode }) =>
-      themeMode === "light" ? "#e0e0e0" : "#666"};
-    color: ${({ themeMode }) => (themeMode === "light" ? "#000" : "#ddd")};
+    background-color: ${({ $themeMode }) =>
+      $themeMode === "light" ? "#e0e0e0" : "#666"};
+    color: ${({ $themeMode }) => ($themeMode === "light" ? "#000" : "#ddd")};
   }
 `;
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [task, setTask] = useState("");
-  const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
+  const [todos, setTodos] = useState<Todo[]>(() => {
     const savedTodos = localStorage.getItem("todos");
-    if (savedTodos) setTodos(JSON.parse(savedTodos));
-  }, []);
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
+  const [task, setTask] = useState("");
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme || "light";
+  });
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   const addTodo = () => {
     if (task.trim() === "") return;
-    setTodos([...todos, { id: Date.now(), text: task, completed: false }]);
+    const newTodo = {
+      id: Date.now(),
+      text: task,
+      completed: false,
+    };
+    const updatedTodos = [...todos, newTodo];
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setTask("");
   };
 
   const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   };
 
   return (
@@ -69,10 +83,15 @@ function App() {
           placeholder="Add a task..."
           value={task}
           onChange={(e) => setTask(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              addTodo();
+            }
+          }}
         />
 
         <ThemeButton
-          themeMode={theme}
+          $themeMode={theme}
           onClick={addTodo}
           style={{ marginTop: "10px" }}
         >

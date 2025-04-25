@@ -9,7 +9,7 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({ todo, toggleTodo, deleteTodo }) => {
   return (
-    <ListItem completed={todo.completed}>
+    <ListItem $completed={todo.completed}>
       <span>{todo.text}</span>
       <div>
         <Button onClick={() => toggleTodo(todo.id)}>✔</Button>

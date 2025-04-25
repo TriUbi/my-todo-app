@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ListItem = styled.li<{ completed?: boolean }>`
+export const ListItem = styled.li<{ $completed?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,14 +15,14 @@ export const ListItem = styled.li<{ completed?: boolean }>`
 
   span {
     flex: 1;
-    text-decoration: ${({ completed }) =>
-      completed ? "line-through" : "none"};
-    color: ${({ completed, theme }) =>
+    text-decoration: ${({ $completed }) =>
+      $completed ? "line-through" : "none"};
+    color: ${({ $completed, theme }) =>
       theme.background.includes("1c1c1c")
-        ? completed
+        ? $completed
           ? "#666666"
           : "#000000"
-        : completed
+        : $completed
         ? "#888"
         : theme.text};
   }

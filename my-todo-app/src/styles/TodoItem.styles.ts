@@ -8,7 +8,8 @@ export const ListItem = styled.li<{ completed?: boolean }>`
   margin: 8px 0;
   background-color: ${({ theme }) => theme.itemBackground || "#f9f9f9"};
   border-radius: 8px;
-  color: ${({ theme }) => theme.text};
+  color: ${({ theme }) =>
+    theme.background.includes("1c1c1c") ? "#000000" : theme.text};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
 
@@ -16,7 +17,14 @@ export const ListItem = styled.li<{ completed?: boolean }>`
     flex: 1;
     text-decoration: ${({ completed }) =>
       completed ? "line-through" : "none"};
-    color: ${({ completed, theme }) => (completed ? "#888" : theme.text)};
+    color: ${({ completed, theme }) =>
+      theme.background.includes("1c1c1c")
+        ? completed
+          ? "#666666"
+          : "#000000"
+        : completed
+        ? "#888"
+        : theme.text};
   }
 
   &:hover {
